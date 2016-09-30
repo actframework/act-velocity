@@ -22,9 +22,9 @@
   <groupId>org.actframework</groupId>
   <artifactId>act-velocity</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
 
-  <name>ACT FreeMarker</name>
+  <name>ACT Velocity</name>
   <description>Implement ActFramework View with Velocity template engine</description>
   <url>http://actframework.org/plugin/freemarker</url>
 
@@ -99,7 +99,7 @@
     <dependency>
       <groupId>org.actframework</groupId>
       <artifactId>act</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
 
