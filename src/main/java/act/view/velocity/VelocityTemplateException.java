@@ -2,32 +2,33 @@ package act.view.velocity;
 
 import act.Act;
 import act.app.SourceInfo;
-import freemarker.core.ParseException;
-import freemarker.template.TemplateException;
-import org.osgl.$;
+import org.apache.velocity.exception.ExtendedParseException;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.VelocityException;
 import org.osgl.util.C;
 import org.osgl.util.E;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 public class VelocityTemplateException extends act.view.TemplateException {
 
-    public VelocityTemplateException(ParseException t) {
-        super(t);
-    }
+    private VelocityException velocityException;
 
-    public VelocityTemplateException(freemarker.template.TemplateException t) {
+    public VelocityTemplateException(VelocityException t) {
         super(t);
-        sourceInfo = getJavaSourceInfo(t.getCause());
+        velocityException = t;
+        if (t instanceof MethodInvocationException) {
+            sourceInfo = getJavaSourceInfo(t.getCause());
+        }
     }
 
     @Override
     protected void populateSourceInfo(Throwable t) {
-        if (t instanceof ParseException) {
-            templateInfo = new FreeMarkerSourceInfo((ParseException) t);
-        } else if (t instanceof freemarker.template.TemplateException) {
-            templateInfo = new FreeMarkerSourceInfo((freemarker.template.TemplateException) t);
+        if (t instanceof ParseErrorException) {
+            templateInfo = new VelocitySourceInfo((ParseErrorException) t);
+        } else if (t instanceof ExtendedParseException) {
+            templateInfo = new VelocitySourceInfo((ExtendedParseException) t);
         } else {
             throw E.unexpected("Unknown exception type: %s", t.getClass());
         }
@@ -36,21 +37,12 @@ public class VelocityTemplateException extends act.view.TemplateException {
     @Override
     public String errorMessage() {
         Throwable t = getCauseOrThis();
-        if (t instanceof ParseException || t instanceof TemplateException) {
-            try {
-                Method m = t.getClass().getDeclaredMethod("getDescription");
-                m.setAccessible(true);
-                return $.invokeVirtual(t, m);
-            } catch (NoSuchMethodException e) {
-                throw E.unexpected(e);
-            }
-        }
-        return getCauseOrThis().getMessage();
+        return t.getMessage();
     }
 
     @Override
     public List<String> stackTrace() {
-        if (getCause() instanceof ParseException) {
+        if (!(velocityException instanceof MethodInvocationException)) {
             return C.list();
         }
         return super.stackTrace();
@@ -61,23 +53,23 @@ public class VelocityTemplateException extends act.view.TemplateException {
         return s.contains("freemarker.ext.beans.BeansWrapper.invokeMethod");
     }
 
-    private static class FreeMarkerSourceInfo extends SourceInfo.Base {
+    private static class VelocitySourceInfo extends SourceInfo.Base {
 
-        FreeMarkerSourceInfo(ParseException e) {
+        VelocitySourceInfo(ParseErrorException e) {
             lineNumber = e.getLineNumber();
             fileName = e.getTemplateName();
             lines = readTemplateSource(fileName);
         }
 
-        FreeMarkerSourceInfo(freemarker.template.TemplateException e) {
+        VelocitySourceInfo(ExtendedParseException e) {
             lineNumber = e.getLineNumber();
-            fileName = e.getTemplateSourceName();
+            fileName = e.getTemplateName();
             lines = readTemplateSource(fileName);
         }
 
         private static List<String> readTemplateSource(String template) {
-            FreeMarkerView view = (FreeMarkerView) Act.viewManager().view(FreeMarkerView.ID);
-            return view.loadResources(template);
+            VelocityView view = (VelocityView) Act.viewManager().view(VelocityView.ID);
+            return view.loadContent(template);
         }
     }
 }

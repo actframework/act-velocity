@@ -8,11 +8,24 @@ import java.io.InputStream;
 public class ActResourceLoader extends ClasspathResourceLoader {
     @Override
     public InputStream getResourceStream(String name) throws ResourceNotFoundException {
-        return super.getResourceStream("/velocity" + name);
+        InputStream is = null;
+        if (name.startsWith("/velocity/")) {
+            is = super.getResourceStream(name);
+        }
+        return null == is ? super.getResourceStream(attachPrefix(name)) : is;
     }
 
     @Override
     public boolean resourceExists(String resourceName) {
-        return super.resourceExists("/velocity" + resourceName);
+        if (resourceName.startsWith("/velocity/")) {
+            if (super.resourceExists(resourceName)) {
+                return true;
+            }
+        }
+        return super.resourceExists(attachPrefix(resourceName));
+    }
+
+    private String attachPrefix(String path) {
+        return (path.startsWith("/") ? "/velocity" : "/velocity/") + path;
     }
 }
