@@ -37,7 +37,10 @@ public class VelocityTemplateException extends act.view.TemplateException {
     @Override
     public String errorMessage() {
         Throwable t = getCauseOrThis();
-        return t.getMessage();
+        if (t instanceof VelocityException) {
+            return t.getLocalizedMessage();
+        }
+        return t.toString();
     }
 
     @Override

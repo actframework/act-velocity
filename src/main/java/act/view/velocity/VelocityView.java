@@ -1,14 +1,18 @@
 package act.view.velocity;
 
+import act.app.App;
 import act.util.ActContext;
 import act.view.Template;
 import act.view.View;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.exception.VelocityException;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
 import org.apache.velocity.runtime.resource.ResourceManager;
 import org.apache.velocity.runtime.resource.ResourceManagerImpl;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 import org.apache.velocity.runtime.resource.loader.ResourceLoader;
 import org.osgl.$;
 import org.osgl.util.C;
@@ -19,6 +23,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
+
+import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
 
 public class VelocityView extends View {
 
@@ -46,8 +52,8 @@ public class VelocityView extends View {
     }
 
     @Override
-    protected void init() {
-        initEngine();
+    protected void init(App app) {
+        initEngine(app);
     }
 
     List<String> loadContent(String template) {
@@ -75,15 +81,22 @@ public class VelocityView extends View {
         }
     }
 
-    private void initEngine() {
+    private void initEngine(App app) {
         engine = new VelocityEngine();
-        engine.init(conf());
+        engine.init(conf(app));
     }
 
-    private Properties conf() {
+    private Properties conf(App app) {
         Properties p = new Properties();
-        p.setProperty("resource.loader", "act");
-        p.setProperty("act.resource.loader.class", ActResourceLoader.class.getName());
+
+        p.setProperty(RESOURCE_LOADER, "file,class");
+        p.setProperty("file.resource.loader.class", FileResourceLoader.class.getName());
+        p.setProperty("file.resource.loader.path", templateRootDir().getAbsolutePath());
+        p.setProperty("file.resource.loader.cache", app.isDev() ? "false" : "true");
+        p.setProperty("file.resource.loader.modificationCheckInterval", "0");
+
+        p.setProperty("class.resource.loader.class", ActResourceLoader.class.getName());
+        p.setProperty("class.resource.loader.path", templateHome());
         return p;
     }
 }
