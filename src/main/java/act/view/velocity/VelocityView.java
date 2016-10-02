@@ -7,15 +7,12 @@ import act.view.View;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.exception.VelocityException;
-import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
 import org.apache.velocity.runtime.resource.ResourceManager;
 import org.apache.velocity.runtime.resource.ResourceManagerImpl;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 import org.apache.velocity.runtime.resource.loader.ResourceLoader;
 import org.osgl.$;
-import org.osgl.util.C;
 import org.osgl.util.E;
 import org.osgl.util.IO;
 
@@ -53,7 +50,8 @@ public class VelocityView extends View {
 
     @Override
     protected void init(App app) {
-        initEngine(app);
+        engine = new VelocityEngine();
+        engine.init(conf(app));
     }
 
     List<String> loadContent(String template) {
@@ -79,11 +77,6 @@ public class VelocityView extends View {
         } catch (NoSuchMethodException e) {
             throw E.unexpected(e);
         }
-    }
-
-    private void initEngine(App app) {
-        engine = new VelocityEngine();
-        engine.init(conf(app));
     }
 
     private Properties conf(App app) {
