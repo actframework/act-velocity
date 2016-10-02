@@ -18,13 +18,13 @@ public class VelocityTemplateException extends act.view.TemplateException {
     public VelocityTemplateException(VelocityException t) {
         super(t);
         velocityException = t;
-        if (t instanceof MethodInvocationException) {
-            sourceInfo = getJavaSourceInfo(t.getCause());
-        }
     }
 
     @Override
     protected void populateSourceInfo(Throwable t) {
+        if (t instanceof MethodInvocationException) {
+            sourceInfo = getJavaSourceInfo(t.getCause());
+        }
         if (t instanceof ParseErrorException) {
             templateInfo = new VelocitySourceInfo((ParseErrorException) t);
         } else if (t instanceof ExtendedParseException) {
