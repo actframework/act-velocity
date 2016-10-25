@@ -54,7 +54,7 @@ public class VelocityView extends View {
         engine.init(conf(app));
     }
 
-    List<String> loadContent(String template) {
+    public List<String> loadContent(String template) {
         if (null == resourceManager) {
             try {
                 Field fieldRi = VelocityEngine.class.getDeclaredField("ri");
