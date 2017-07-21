@@ -35,15 +35,6 @@ public class VelocityTemplateException extends act.view.TemplateException {
     }
 
     @Override
-    public String errorMessage() {
-        Throwable t = getCauseOrThis();
-        if (t instanceof VelocityException) {
-            return t.getLocalizedMessage();
-        }
-        return t.toString();
-    }
-
-    @Override
     public List<String> stackTrace() {
         if (!(velocityException instanceof MethodInvocationException)) {
             return C.list();
