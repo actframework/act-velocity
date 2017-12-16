@@ -21,6 +21,12 @@ public class VelocityTemplateException extends act.view.TemplateException {
     }
 
     @Override
+    public String errorMessage() {
+        Throwable t = rootCauseOf(this);
+        return t.toString();
+    }
+
+    @Override
     protected void populateSourceInfo(Throwable t) {
         if (t instanceof MethodInvocationException) {
             sourceInfo = getJavaSourceInfo(t.getCause());

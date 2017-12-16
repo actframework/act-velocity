@@ -1,7 +1,8 @@
 package act.view.velocity;
 
+import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
+
 import act.app.App;
-import act.util.ActContext;
 import act.view.Template;
 import act.view.View;
 import org.apache.velocity.app.Velocity;
@@ -25,8 +26,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
 
-import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
-
 public class VelocityView extends View {
 
     public static final String ID = "velocity";
@@ -44,7 +43,7 @@ public class VelocityView extends View {
     }
 
     @Override
-    protected Template loadTemplate(String resourcePath, ActContext context) {
+    protected Template loadTemplate(String resourcePath) {
         try {
             org.apache.velocity.Template template = engine.getTemplate(resourcePath);
             return new VelocityTemplate(template);
@@ -52,14 +51,14 @@ public class VelocityView extends View {
             if (resourcePath.endsWith(suffix)) {
                 return null;
             }
-            return loadTemplate(S.concat(resourcePath, suffix), context);
+            return loadTemplate(S.concat(resourcePath, suffix));
         } catch (VelocityException e) {
             throw new VelocityTemplateException(e);
         }
     }
 
     @Override
-    protected Template loadInlineTemplate(String s, ActContext actContext) {
+    protected Template loadInlineTemplate(String s) {
         stringResourceRepository().putStringResource(s, s);
         org.apache.velocity.Template template = stringEngine.getTemplate(s);
         return new VelocityTemplate(template);
