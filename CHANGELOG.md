@@ -1,5 +1,9 @@
 # Act-Velocity Change Log
 
+1.3.0 - 20/Feb/2017
+* catch up to act-1.7.0
+* update to velocity 2.0
+
 1.2.0 - 19/Dec/2017
 * catch up to act-1.6.0
 

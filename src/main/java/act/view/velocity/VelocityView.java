@@ -51,7 +51,7 @@ import java.util.Properties;
 @Versioned
 public class VelocityView extends View {
 
-    public static final Version VERSION = Version.get();
+    public static final Version VERSION = Version.of(VelocityView.class);
 
     public static final String ID = "velocity";
 
@@ -133,7 +133,7 @@ public class VelocityView extends View {
             Method method = ResourceManagerImpl.class.getDeclaredMethod("getLoaderForResource", String.class);
             method.setAccessible(true);
             ResourceLoader resourceLoader = $.invokeVirtual(resourceManager, method, template);
-            return IO.readLines(resourceLoader.getResourceStream(template));
+            return IO.readLines(resourceLoader.getResourceReader(template, "UTF-8"));
         } catch (NoSuchMethodException e) {
             throw E.unexpected(e);
         }

@@ -20,19 +20,19 @@ package act.view.velocity;
  * #L%
  */
 
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.apache.velocity.util.ExtProperties;
 import org.osgl.util.S;
 
-import java.io.InputStream;
+import java.io.Reader;
 
 public class ActResourceLoader extends ClasspathResourceLoader {
 
     private String root;
 
     @Override
-    public void init(ExtendedProperties configuration) {
+    public void init(ExtProperties configuration) {
         super.init(configuration);
         root = configuration.getString("path");
         if (S.blank(root)) {
@@ -41,12 +41,12 @@ public class ActResourceLoader extends ClasspathResourceLoader {
     }
 
     @Override
-    public InputStream getResourceStream(String name) throws ResourceNotFoundException {
-        InputStream is = null;
+    public Reader getResourceReader(String name, String encoding) throws ResourceNotFoundException {
+        Reader reader = null;
         if (name.startsWith(root)) {
-            is = super.getResourceStream(name);
+            reader = super.getResourceReader(name, encoding);
         }
-        return null == is ? super.getResourceStream(attachPrefix(name)) : is;
+        return null == reader ? super.getResourceReader(attachPrefix(name), encoding) : reader;
     }
 
     @Override
