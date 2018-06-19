@@ -1,5 +1,8 @@
 # Act-Velocity Change Log
 
+1.3.4 - 19/Jun/2018
+* update act to 1.8.8-RC10
+
 1.3.3 - 19/May/2018
 * update act to 1.8.8-RC5
 

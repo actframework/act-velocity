@@ -37,7 +37,7 @@ public class VelocityTemplate extends TemplateBase {
     Template tmpl;
 
     VelocityTemplate(Template tmpl) {
-        this.tmpl = $.notNull(tmpl);
+        this.tmpl = $.requireNotNull(tmpl);
     }
 
     @Override
