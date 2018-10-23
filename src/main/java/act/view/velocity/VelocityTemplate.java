@@ -41,6 +41,11 @@ public class VelocityTemplate extends TemplateBase {
     }
 
     @Override
+    public boolean supportCache() {
+        return false;
+    }
+
+    @Override
     protected String render(Map<String, Object> renderArgs) {
         Writer w = new StringWriter();
         Context ctx = new VelocityContext(renderArgs);
