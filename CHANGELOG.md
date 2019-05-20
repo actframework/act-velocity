@@ -1,5 +1,9 @@
 # Act-Velocity Change Log
 
+1.3.6 - 20/May/2018
+* update to act-1.8.22
+* update velocity to 2.1
+
 1.3.5 - 30/Oct/2018
 * update act to 1.8.8
 * disable template cache for VelocityTemplate
