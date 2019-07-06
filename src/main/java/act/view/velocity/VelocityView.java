@@ -21,6 +21,7 @@ package act.view.velocity;
  */
 
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
+import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
 import act.app.App;
 import act.view.Template;
@@ -108,9 +109,9 @@ public class VelocityView extends View {
 
     private void initStringEngine() {
         stringEngine = new VelocityEngine();
-        stringEngine.setProperty(Velocity.RESOURCE_LOADER, "string");
-        stringEngine.addProperty("string.resource.loader.class", StringResourceLoader.class.getName());
-        stringEngine.addProperty("string.resource.loader.repository.static", "false");
+        stringEngine.setProperty(RESOURCE_LOADERS, "string");
+        stringEngine.addProperty(RESOURCE_LOADER + ".string.class", StringResourceLoader.class.getName());
+        stringEngine.addProperty(RESOURCE_LOADER + ".string.repository.static", "false");
         stringEngine.init();
     }
 
@@ -142,14 +143,14 @@ public class VelocityView extends View {
     private Properties conf(App app) {
         Properties p = new Properties();
 
-        p.setProperty(RESOURCE_LOADER, "file,class");
-        p.setProperty("file.resource.loader.class", FileResourceLoader.class.getName());
-        p.setProperty("file.resource.loader.path", templateRootDir().getAbsolutePath());
-        p.setProperty("file.resource.loader.cache", app.isDev() ? "false" : "true");
-        p.setProperty("file.resource.loader.modificationCheckInterval", "0");
+        p.setProperty(RESOURCE_LOADERS, "file,class");
+        p.setProperty(RESOURCE_LOADER + ".file.class", FileResourceLoader.class.getName());
+        p.setProperty(RESOURCE_LOADER + ".file.path", templateRootDir().getAbsolutePath());
+        p.setProperty(RESOURCE_LOADER + ".file.cache", app.isDev() ? "false" : "true");
+        p.setProperty(RESOURCE_LOADER + ".file.modification_check_interval", "0");
 
-        p.setProperty("class.resource.loader.class", ActResourceLoader.class.getName());
-        p.setProperty("class.resource.loader.path", templateHome());
+        p.setProperty(RESOURCE_LOADER + ".class.class", ActResourceLoader.class.getName());
+        p.setProperty(RESOURCE_LOADER + ".class.path", templateHome());
         return p;
     }
 }
