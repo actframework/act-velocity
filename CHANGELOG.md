@@ -1,8 +1,8 @@
 # Act-Velocity Change Log
 
-1.3.7
+1.3.7 - 15/Sep/2019
 * Using deprecated configuration key name #1
-
+* update to act-1.8.27
 
 1.3.6 - 20/May/2018
 * update to act-1.8.22
