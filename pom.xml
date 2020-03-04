@@ -29,12 +29,12 @@
   <parent>
     <groupId>org.actframework</groupId>
     <artifactId>parent</artifactId>
-    <version>1.8.29</version>
+    <version>1.8.32</version>
   </parent>
 
   <properties>
     <scm.url>git@github.com:actframework/act-velocity.git</scm.url>
-    <velocity.version>2.1</velocity.version>
+    <velocity.version>2.2</velocity.version>
   </properties>
 
   <scm>
